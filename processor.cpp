@@ -15,51 +15,77 @@ void WordProcessor::printProcessedTitles()
     {            
         for(auto word : title)
         {
-            cout << word << " ";
+            cout << word.first << " ";
         }
         cout << endl;
     }
 }
 
-list<list<string>> WordProcessor::filterStopWords()
+list<list<pair<string, int>>> WordProcessor::getProcessedTitles()
+{
+    return processed_titles;
+}
+
+// This function adds an index to each word, in the form pair<string, int>. This is essential to order words correctly when performing the circular shifts.
+list<list<pair<string, int>>> WordProcessor::enumerateWords()
+{
+    list<list<pair<string, int>>> indexed_titles_words;
+
+    for (auto title : titles)
+    {
+        int idx = 0;
+        list<pair<string, int>> aux_list;
+
+        for (auto word : title)
+        {
+            pair<string, int> word_idx = make_pair(word, idx);
+            aux_list.push_back(word_idx);
+
+            idx++;
+        }
+
+        indexed_titles_words.push_back(aux_list);
+    }
+
+    return indexed_titles_words;
+}
+
+list<list<pair<string, int>>> WordProcessor::filterStopWords()
 {   
-    list<list<string>> aux_list = titles;
-    list<list<string>> filtered_titles;
+    list<list<pair<string, int>>> aux_list = enumerateWords();
+    list<list<pair<string, int>>> filtered_titles;
+    
     for(auto title : aux_list)
     {
-        
-        for(auto word: stop_words)
+        for (list<pair<string, int>>::iterator i = title.begin(); i != title.end(); i++)
         {
-            title.remove(word);
+            for(auto stop_word : stop_words)
+            {
+                pair<string, int> aux_pair = *i;
+                
+                string word = aux_pair.first;
+                
+                for_each(word.begin(), word.end(), [](char & c)
+                {
+	                c = tolower(c);
+                });
+
+                for_each(stop_word.begin(), stop_word.end(), [](char & c)
+                {
+	                c = tolower(c);
+                });
+            
+                if(word == stop_word)
+                {
+                    i = title.erase(i);
+                    i--;
+                }
+            }
         }
         
-        list<string> filtered_title = title;
+        list<pair<string, int>> filtered_title = title;
         filtered_titles.push_back(filtered_title);
     }
     
     return filtered_titles;
-}
-
-
-int main()
-{
-    // Creates a module that handles stop words extraction
-    ParserModule<InputTXT> stop_words("stopWords");
-    
-    // Creates a module that handles titles extraction
-    ParserModule<BibliographyManager<InputTXT>> bib("bibliography");
-
-    // This method breaks a title into a list of words. This is required for the stop words removal.
-    bib.setListTitlesWords(bib.getListWords());
-
-    // Gets the output from the ParserModule objects stop_words and bib
-    list<string> list_stop_words = stop_words.getListWords();
-
-    list<list<string>> list_titles_words = bib.getListTitlesWords();
-
-    WordProcessor main_processor(list_titles_words, list_stop_words);
-
-    main_processor.printProcessedTitles();
-
-    return 0;
 }
