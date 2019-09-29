@@ -1,4 +1,3 @@
-#include "parser.h"
 #include "processor.h"
 
 using namespace std;
@@ -57,33 +56,34 @@ list<list<pair<string, int>>> WordProcessor::filterStopWords()
     
     for(auto title : aux_list)
     {
-        for (list<pair<string, int>>::iterator i = title.begin(); i != title.end(); i++)
+        list<pair<string, int>> aux_title = title;
+        
+        for (list<pair<string, int>>::iterator i = aux_title.begin(); i != aux_title.end(); i++)
         {
-            for(auto stop_word : stop_words)
-            {
-                pair<string, int> aux_pair = *i;
-                
-                string word = aux_pair.first;
-                
-                for_each(word.begin(), word.end(), [](char & c)
-                {
-	                c = tolower(c);
-                });
-
-                for_each(stop_word.begin(), stop_word.end(), [](char & c)
-                {
-	                c = tolower(c);
-                });
+            pair<string,int> word = *i;
             
-                if(word == stop_word)
+            for (auto stop_word : stop_words)
+            {
+                for (int i = 0; i < word.first.length(); i++)
                 {
-                    i = title.erase(i);
+                    word.first[i] = tolower(word.first[i]); 
+                }
+
+                for (int i = 0; i < stop_word.length(); i++)
+                {
+                    stop_word[i] = tolower(stop_word[i]); 
+                }
+
+                if(word.first == stop_word)
+                {
+                    aux_title.erase(i);
                     i--;
                 }
             }
         }
+    
         
-        list<pair<string, int>> filtered_title = title;
+        list<pair<string, int>> filtered_title = aux_title;
         filtered_titles.push_back(filtered_title);
     }
     
