@@ -9,6 +9,7 @@ class WordProcessor
         void printProcessedTitles();
 
         list<list<pair<string, int>>> getProcessedTitles();
+    
     protected:
         list<list<string>> titles;
         list<string> stop_words;

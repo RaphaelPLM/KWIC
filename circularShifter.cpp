@@ -1,12 +1,17 @@
 #include "circularShifter.hpp"
+#include "ext_Alphabetizer.hpp"
 
 using namespace std;
-CircularShifter::CircularShifter(list<list<pair<string, int>>> processed_titles, list<list<string>> titles_words)
+
+template <typename SortAlgorithm>
+CircularShifter<SortAlgorithm>::CircularShifter(list<list<pair<string, int>>> processed_titles, list<list<string>> titles_words)
 {
     shifted_titles_words = shiftTitles(processed_titles, titles_words);
     list_kwic = groupWords();
 }
-void CircularShifter::printShiftedTitles()
+
+template <typename SortAlgorithm>
+void CircularShifter<SortAlgorithm>::printShiftedTitles()
 {
     for(auto title : list_kwic)
     {
@@ -17,8 +22,23 @@ void CircularShifter::printShiftedTitles()
         cout << endl;
     }
 }
+
+template <typename SortAlgorithm>
+void CircularShifter<SortAlgorithm>::printOrderedShiftedTitles()
+{
+    for(auto title : list_kwic_ordered)
+    {
+        for(auto permutation : title)
+        {
+            cout << permutation << endl;
+        }
+        cout << endl;
+    }
+}
+
 // During the processing, titles are break into individual words. This function reagroup this individual words into a single string.
-list<list<string>> CircularShifter::groupWords()
+template <typename SortAlgorithm>
+list<list<string>> CircularShifter<SortAlgorithm>::groupWords()
 {
     list<list<string>> list_kwic;
     
@@ -43,9 +63,14 @@ list<list<string>> CircularShifter::groupWords()
         }
         list_kwic.push_back(group_title_words);
     }            
+
+    list_kwic_ordered = Alphabetizer::sortTitles(list_kwic);
+
     return list_kwic;
 }
-list<list<list<string>>> CircularShifter::shiftTitles(list<list<pair<string, int>>> processed_titles_keywords, list<list<string>> titles_words)
+
+template <typename SortAlgorithm>
+list<list<list<string>>> CircularShifter<SortAlgorithm>::shiftTitles(list<list<pair<string, int>>> processed_titles_keywords, list<list<string>> titles_words)
 {
     // TODO: Mudar nome
     list<list<list<string>>> shifted_titles_words;
@@ -76,3 +101,7 @@ list<list<list<string>>> CircularShifter::shiftTitles(list<list<pair<string, int
     }
     return shifted_titles_words;
 }
+
+// Instantiates all needed templates. This is needed to avoid undefined references during files linking.
+template class CircularShifter<Alphabetizer>;
+

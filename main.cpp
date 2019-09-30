@@ -1,6 +1,7 @@
 #include "parser.h"
 #include "processor.h"
 #include "circularShifter.hpp"
+#include "ext_Alphabetizer.hpp"
 
 int main()
 {
@@ -9,9 +10,6 @@ int main()
     
     // Creates a module that handles titles extraction
     ParserModule<BibliographyManager<InputTXT>> bib("bibliography");
-
-    // This method breaks a title into a list of words. This is required for the stop words removal.
-    bib.setListTitlesWords(bib.getListWords());
 
     // Gets the output from the ParserModule objects stop_words and bib
     list<string> list_stop_words = stop_words.getListWords();
@@ -23,9 +21,10 @@ int main()
 
     list<list<pair<string, int>>> indexed_keywords = main_processor.getProcessedTitles();
 
-    CircularShifter shifterModule(indexed_keywords, list_titles_words);
+    CircularShifter<Alphabetizer> shifterModule(indexed_keywords, list_titles_words);
 
     shifterModule.printShiftedTitles();
+    shifterModule.printOrderedShiftedTitles();
 
     return 0;
 }

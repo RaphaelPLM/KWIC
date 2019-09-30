@@ -20,15 +20,15 @@ list<string> ParserModule<InputFormat>::getListWords()
     return list_input;
 }
 
-template <typename BibExtension>
-list<list<string>> BibliographyManager<BibExtension>::getListTitlesWords()
+template <typename InputFormat>
+list<list<string>> BibliographyManager<InputFormat>::getListTitlesWords()
 {
     return titles_words;
 }
 
 // Breaks a title into multiple words (including stop words)
-template <typename BibExtension>
-list<list<string>> BibliographyManager<BibExtension>::extractWords(list<string> titles)
+template <typename InputFormat>
+list<list<string>> BibliographyManager<InputFormat>::extractWords(list<string> titles)
 {            
     list<list<string>> titles_words;
     
@@ -51,8 +51,8 @@ list<list<string>> BibliographyManager<BibExtension>::extractWords(list<string> 
     Set the list of words in a list of titles.
         *TODO: extractWords(titles) should initialize a list<list<string>> in instantiation time. Currently, it depends on the call of the function setListTitlesWords(...);
 */
-template <typename BibExtension>
-void BibliographyManager<BibExtension>::setListTitlesWords(list<string> titles)
+template <typename InputFormat>
+void BibliographyManager<InputFormat>::setListTitlesWords(list<string> titles)
 {
     titles_words = extractWords(titles);
 }
@@ -61,6 +61,8 @@ void BibliographyManager<BibExtension>::setListTitlesWords(list<string> titles)
 list<string> InputTXT::generateListWords(string file_name)
 {
     ifstream f_words;
+
+    list<string> list_words;
     
     // Opens the file based on the file_name provided
     f_words.open(file_name + ".txt");
