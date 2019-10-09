@@ -51,6 +51,9 @@ list<list<string>> CircularShifter<SortAlgorithm>::groupWords()
             int count = 0;
             string resultant_title;
             
+
+            /*  Concatenates each word of a permutation into a resultant string. At the end of the loop,
+                a single string that contains all words of a title is expected */
             for (auto word : title_permutation)
             {
                 if(count < title_permutation.size() - 1)                        
@@ -61,18 +64,24 @@ list<list<string>> CircularShifter<SortAlgorithm>::groupWords()
             }
             group_title_words.push_back(resultant_title);
         }
+       
         list_kwic.push_back(group_title_words);
     }            
 
-    list_kwic_ordered = Alphabetizer::sortTitles(list_kwic);
+    list_kwic_ordered = SortAlgorithm::sortTitles(list_kwic);
 
     return list_kwic;
 }
 
 template <typename SortAlgorithm>
+list<list<string>> CircularShifter<SortAlgorithm>::getTitles()
+{
+    return list_kwic_ordered;
+}
+
+template <typename SortAlgorithm>
 list<list<list<string>>> CircularShifter<SortAlgorithm>::shiftTitles(list<list<pair<string, int>>> processed_titles_keywords, list<list<string>> titles_words)
 {
-    // TODO: Mudar nome
     list<list<list<string>>> shifted_titles_words;
     
     auto it = processed_titles_keywords.begin();
