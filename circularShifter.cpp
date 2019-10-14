@@ -1,5 +1,6 @@
 #include "circularShifter.hpp"
 #include "ext_Alphabetizer.hpp"
+#include "ext_ReverseAlphabetizer.hpp"
 
 using namespace std;
 
@@ -113,4 +114,4 @@ list<list<list<string>>> CircularShifter<SortAlgorithm>::shiftTitles(list<list<p
 
 // Instantiates all needed templates. This is needed to avoid undefined references during files linking.
 template class CircularShifter<Alphabetizer>;
-
+template class CircularShifter<ReverseAlphabetizer>;

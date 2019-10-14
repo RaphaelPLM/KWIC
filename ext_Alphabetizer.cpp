@@ -7,7 +7,7 @@ list<list<string>> Alphabetizer::sortTitles(list<list<string>> i_list)
     for (auto i = i_list.begin(); i != i_list.end(); i++)
     {
         list<string> sublist = *i;
-        
+
         sublist.sort();
 
         ordered_list.push_back(sublist);

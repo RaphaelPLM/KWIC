@@ -29,11 +29,23 @@ class ParserModule : public InputFormat
         list<string> getListWords();
 };
 
+class InputFormat
+{
+    protected:    
+        virtual list<string> generateListWords(string file_name) = 0;
+};
+
 // Implements a mixing class that reads data from a .txt file.
-class InputTXT
+class InputTXT : InputFormat
 {   
     protected:    
-        list<string> generateListWords(string file_name);
+        list<string> generateListWords(string file_name) override;
+};
+
+class InputXML : InputFormat
+{
+    protected:
+        list<string> generateListWords(string file_name) override;
 };
 
 /*

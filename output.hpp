@@ -7,10 +7,10 @@ class OutputModule
 {
     public:
         // Constructor
-        OutputModule(list<list<string>> p);
+        OutputModule(list<list<string>> p, list<string> titles);
+        void generateOutput();
     
     protected:
         list<list<string>> permutations;
-    
-        void generateOutput();
+        list<string> original_titles;
 };

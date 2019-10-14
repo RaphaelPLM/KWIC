@@ -2,6 +2,7 @@
 #include "processor.h"
 #include "circularShifter.hpp"
 #include "ext_Alphabetizer.hpp"
+#include "ext_ReverseAlphabetizer.hpp"
 #include "output.hpp"
 
 int main()
@@ -9,7 +10,7 @@ int main()
     // Creates a module that handles stop words extraction by reading a .txt file
     ParserModule<InputTXT> stop_words("stopWords");
     
-    // Creates a module that handles titles extraction by reading a .txt file
+    // Creates a module that handles titles extraction by reading a file
     ParserModule<BibliographyManager<InputTXT>> bib("bibliography");
 
     // Gets the output from the ParserModule objects stop_words and bib
@@ -25,9 +26,11 @@ int main()
     list<list<pair<string, int>>> indexed_keywords = main_processor.getProcessedTitles();
 
     // Instantiates a circular shifter that will handle pre-processed words and generate valid permutations
-    CircularShifter<Alphabetizer> shifterModule(indexed_keywords, list_titles_words);
+    CircularShifter<ReverseAlphabetizer> shifterModule(indexed_keywords, list_titles_words);
 
-    OutputModule outputHandler(shifterModule.getTitles());
+    OutputModule outputHandler(shifterModule.getTitles(),bib.getListWords());
+
+    outputHandler.generateOutput();
 
     return 0;
 }
