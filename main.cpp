@@ -28,9 +28,9 @@ int main()
     // Instantiates a circular shifter that will handle pre-processed words and generate valid permutations
     CircularShifter<ReverseAlphabetizer> shifterModule(indexed_keywords, list_titles_words);
 
-    OutputModule outputHandler(shifterModule.getTitles(),bib.getListWords());
+    OutputModule<OutputTXT> outputHandler(shifterModule.getTitles(), bib.getListWords());
 
-    outputHandler.generateOutput();
+    outputHandler.triggerGenerateOutput();
 
     return 0;
 }

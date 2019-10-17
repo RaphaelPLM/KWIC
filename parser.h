@@ -42,6 +42,7 @@ class InputTXT : InputFormat
         list<string> generateListWords(string file_name) override;
 };
 
+// Implements a mixing class that reads data from a .xml file.
 class InputXML : InputFormat
 {
     protected:
@@ -49,7 +50,7 @@ class InputXML : InputFormat
 };
 
 /*
-    A bibliographys essentially a parser module with an extra list, that consists of each title's words, separatedly.
+    A bibliography is essentially a parser module with an extra list, that consists of each title's words, separatedly.
     * extractWords() - This function implements a logic that breaks titles (a set of words) into individual words, that together compose a list.
 */
 template <typename InputFormat>
@@ -59,18 +60,19 @@ class BibliographyManager : public InputFormat
         // Breaks a title into multiple words (including stop words)
         list<list<string>> extractWords(list<string> titles);
 
+        void setListTitlesWords(list<string> titles);
+
         // Each unit of the list corresponds to another list of words. This sub-list consists of all the words of a title, excluding the stop words.
         list<list<string>> titles_words;
 
     public:
         BibliographyManager()
         {
+            // First, generateListWords(string) creates a list of titles. Then, setListTitlesWords will then call ExtractWords function
             setListTitlesWords(InputFormat::generateListWords("bibliography"));
         }
         
         list<list<string>> getListTitlesWords();
-
-        void setListTitlesWords(list<string> titles);
 };
 
 #endif
