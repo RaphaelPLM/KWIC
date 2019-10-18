@@ -1,7 +1,7 @@
 /* 
     This module handles the inputs of KWIC.
 */
-#include "parser.h"
+#include "parser.hpp"
 
 using namespace std;
 
@@ -9,6 +9,7 @@ using namespace std;
 template <typename InputFormat>
 ParserModule<InputFormat>::ParserModule(string file_name)
 {
+    file_name = file_name;
     list_input = InputFormat::generateListWords(file_name);
 }
 
@@ -34,6 +35,7 @@ list<list<string>> BibliographyManager<InputFormat>::extractWords(list<string> t
     for (auto i = titles.begin(); i != titles.end(); i++)
     {
         string title = *i;
+       
         // Instantiates a whitespace regex
         regex ws_re("\\s+");
 
@@ -51,7 +53,7 @@ list<list<string>> BibliographyManager<InputFormat>::extractWords(list<string> t
         *TODO: extractWords(titles) should initialize a list<list<string>> in instantiation time. Currently, it depends on the call of the function setListTitlesWords(...);
 */
 template <typename InputFormat>
-void BibliographyManager<InputFormat>::setListTitlesWords(list<string> titles)
+void BibliographyManager<InputFormat>::initializeListTitlesWords(list<string> titles)
 {
     titles_words = extractWords(titles);
 }
@@ -91,7 +93,7 @@ list<string> InputXML::generateListWords(string file_name)
 
     list<string> list_words;
 
-    // Opens the file based on the file_name provided
+    // Opens the file based on the provided file_name
     f_words.open(file_name + ".xml");
 
     if (!f_words)
@@ -100,12 +102,29 @@ list<string> InputXML::generateListWords(string file_name)
     // This variable stores a line of the .txt file.
     string word;
 
-    string title_opening_tag = "<Title>";
-    string title_closing_tag = "</Title>";
+    string title_opening_tag;
+    string title_closing_tag;
+
+    // First, the file pointer is advanced line by line, until one of the tags below is found.
+    while(getline(f_words, word))
+    {
+        if(word.find("<Bibliography>") != string::npos)
+        {   
+            title_opening_tag = "<Title>";
+            title_closing_tag = "</Title>";
+            break;
+        }
+        else if(word.find("<StopWords>") != string::npos)
+        {
+            title_opening_tag = "<Word>";
+            title_closing_tag = "</Word>";
+            break;
+        }
+    }
 
     // While !EOF
     while (getline(f_words, word))
-    {
+    {   
         size_t opening_tag_pos = word.find(title_opening_tag);
         size_t closing_tag_pos = word.find(title_closing_tag);
         string filtered_word;
@@ -119,7 +138,7 @@ list<string> InputXML::generateListWords(string file_name)
         }
     }
 
-    // Orders the stop words list.
+    // Orders the words list.
     list_words.sort();
 
     return list_words;

@@ -43,3 +43,31 @@ void OutputTXT::generateOutput(list<list<string>> permutations, list<string> ori
     }
 }
 
+void OutputConsole::generateOutput(list<list<string>> permutations, list<string> original_titles)
+{
+    cout << "Bibliography:" << endl << endl;
+
+    // The first lines of the file consists of the original titles
+    for(auto title : original_titles)
+    {
+        cout << title << endl;
+    }
+
+    // Separator
+    cout << endl << "-----------------------------------------" << endl;
+
+    cout << endl << "Keywords in Context:" << endl << endl;
+
+    // After the separator, the keywords in context of each title will be listed.
+    for(auto titles_set : permutations)
+    {   
+        for(auto title : titles_set)
+        {
+            cout << title << endl;
+        }
+
+        cout << endl;
+    }
+}
+
+

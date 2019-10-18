@@ -1,4 +1,11 @@
-#include<bits/stdc++.h>
+#ifndef CIRCULARSHIFTER_HPP
+#define CIRCULARSHIFTER_HPP
+
+
+#include <stdlib.h>
+#include <iostream>
+#include <list>
+#include <string>
 
 using namespace std;
 
@@ -48,3 +55,5 @@ class CircularShifter : public SortAlgorithm
         */
         list<list<list<string>>> shiftTitles(list<list<pair<string, int>>> processed_titles_keywords, list<list<string>> titles_words);
 };
+
+#endif

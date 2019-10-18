@@ -1,4 +1,12 @@
-#include <bits/stdc++.h>
+#ifndef OUTPUT_HPP
+#define OUTPUT_HPP
+
+
+#include<iostream>
+#include<fstream>
+#include <stdlib.h>
+#include <list>
+#include <string>
 
 using namespace std;
 
@@ -27,4 +35,13 @@ class OutputTXT : OutputFormat
         void generateOutput(list<list<string>> permutations, list<string> titles) override;
 };
 
+class OutputConsole : OutputFormat
+{   
+    protected:    
+        void generateOutput(list<list<string>> permutations, list<string> titles) override;
+};
+
 template class OutputModule<OutputTXT>;
+template class OutputModule<OutputConsole>;
+
+#endif
